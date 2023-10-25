@@ -1,15 +1,11 @@
 import { execSync } from "child_process";
 import path from "path";
-import {
-  ParseResult,
-  Parser,
-  TerraContext,
-  requireModule,
-  resolveModulePath,
-} from "@agoraio-extensions/terra-core";
+import { ParseResult, TerraContext } from "@agoraio-extensions/terra-core";
 import { LegacyCXXParserConfigs } from "./legacy_cxx_parser_configs";
+import * as fs from "fs";
 
 export function runAgoraRtcAstBash(
+  terraBuildDir: string,
   language: string,
   includeHeaderDirs: string[],
   customHeaders: string[],
@@ -19,8 +15,16 @@ export function runAgoraRtcAstBash(
   outputDir: string | undefined,
   legacyRenders: string[]
 ) {
-  // Always find self package in node_modules
-  let selfModulePath = resolveModulePath("@agoraio-extensions/terra-legacy-cxx-parser");
+  // Find the `@agoraio-extensions/cxx-parser` path.
+  let module = "@agoraio-extensions/cxx-parser";
+  let cxxParserModulePath = require.resolve(`${module}/package.json`);
+  let terraPath = path.join(path.dirname(cxxParserModulePath), "cxx", "terra");
+
+  let buildDir = path.join(terraBuildDir, "legacy-cxx-parser");
+  if (!fs.existsSync(buildDir)) {
+    fs.mkdirSync(buildDir);
+  }
+
   let agora_rtc_ast_dir_path = path.join(
     __dirname,
     "..",
@@ -31,7 +35,6 @@ export function runAgoraRtcAstBash(
 
   let build_shell_path = path.join(agora_rtc_ast_dir_path, "build.sh");
   let build_cache_dir_path = path.join(agora_rtc_ast_dir_path, "build");
-  // let outputJsonPath = path.join(build_cache_dir_path, "dump_json.json");
 
   let include_header_dirs_arg = includeHeaderDirs.join(",");
   let visit_headers_arg = parseFiles.join(",");
@@ -49,7 +52,6 @@ export function runAgoraRtcAstBash(
     bashArgs += ` --output-dir=${outputDir}`;
   }
 
-
   if (customHeaders) {
     bashArgs += ` --custom-headers=${customHeaders.join(",")}`;
   }
@@ -60,70 +62,37 @@ export function runAgoraRtcAstBash(
     }
   }
 
-  let buildScript = `bash ${build_shell_path} \"${bashArgs}\"`;
+  let buildScript = `bash ${build_shell_path} ${buildDir} ${terraPath} \"${bashArgs}\"`;
   console.log(`Running command: \n${buildScript}`);
 
   execSync(buildScript, { encoding: "utf8", stdio: "inherit" });
 }
 
-// export class LegacyCXXParser extends Parser {
-//   private legacyCxxParserConfigs: LegacyCXXParserConfigs;
-//   private parseConfig: ParseConfig;
-
-//   public constructor(
-//     parseConfig: ParseConfig,
-//     cxxParserConfigs: LegacyCXXParserConfigs
-//   ) {
-//     super(parseConfig);
-//     this.parseConfig = parseConfig;
-
-//     this.legacyCxxParserConfigs = LegacyCXXParserConfigs.resolve(
-//       parseConfig.configDir,
-//       cxxParserConfigs
-//     );
-//   }
-
-//   override parse(preParseResult?: ParseResult): ParseResult | undefined {
-//     let parseFiles = this.legacyCxxParserConfigs.parseFiles.include.filter(
-//       (it) => {
-//         return !this.legacyCxxParserConfigs.parseFiles.exclude.includes(it);
-//       }
-//     );
-//     runAgoraRtcAstBash(
-//       this.legacyCxxParserConfigs.language,
-//       this.legacyCxxParserConfigs.includeHeaderDirs,
-//       this.legacyCxxParserConfigs.customHeaders,
-//       parseFiles,
-//       this.legacyCxxParserConfigs.definesMacros,
-//       this.legacyCxxParserConfigs.legacyFlags,
-//       this.parseConfig.outputDir,
-//       this.legacyCxxParserConfigs.legacyRenders
-//     );
-
-//     return undefined;
-//   }
-// }
-
-export function LegacyCXXParser(terraContext: TerraContext, args: any, parseResult?: ParseResult): ParseResult | undefined {
+export function LegacyCXXParser(
+  terraContext: TerraContext,
+  args: any,
+  parseResult?: ParseResult
+): ParseResult | undefined {
   let legacyCxxParserConfigs = LegacyCXXParserConfigs.resolve(
     terraContext.configDir,
     args
   );
 
-  let parseFiles = legacyCxxParserConfigs.parseFiles.include.filter(
+  let parseFiles = (legacyCxxParserConfigs.parseFiles.include ?? []).filter(
     (it) => {
-      return !legacyCxxParserConfigs.parseFiles.exclude.includes(it);
+      return !(legacyCxxParserConfigs.parseFiles.exclude ?? []).includes(it);
     }
   );
   runAgoraRtcAstBash(
+    terraContext.buildDir,
     legacyCxxParserConfigs.language,
     legacyCxxParserConfigs.includeHeaderDirs,
-    legacyCxxParserConfigs.customHeaders,
+    legacyCxxParserConfigs.customHeaders ?? [],
     parseFiles,
-    legacyCxxParserConfigs.definesMacros,
-    legacyCxxParserConfigs.legacyFlags,
+    legacyCxxParserConfigs.definesMacros ?? [],
+    legacyCxxParserConfigs.legacyFlags ?? [],
     terraContext.outputDir,
-    legacyCxxParserConfigs.legacyRenders
+    legacyCxxParserConfigs.legacyRenders ?? []
   );
 
   return undefined;

@@ -5,12 +5,11 @@ set -x
 
 SCRIPT_PATH=$(dirname "$0")
 MY_PATH=$(realpath ${SCRIPT_PATH})
-OUTPUT_PATH=$MY_PATH/build
-ARGS=$1
 
-if [ ! -d "${OUTPUT_PATH}" ]; then
-    mkdir -p ${OUTPUT_PATH}
-fi
+BUILD_DIR=$1
+TERRA_PATH=$2
+ARGS=$3
+OUTPUT_PATH=${BUILD_DIR}
 
 pushd ${OUTPUT_PATH}
 
@@ -21,6 +20,7 @@ cmake \
     -DLLVM_CONFIG_BINARY=$(which llvm-config) \
     -DLLVM_DOWNLOAD_URL=${LLVM_DOWNLOAD_URL} \
     -DRUNTIME_OUTPUT_DIRECTORY=${OUTPUT_PATH} \
+    -DTERRA_PATH=${TERRA_PATH} \
     ${MY_PATH}
 
 cmake --build .

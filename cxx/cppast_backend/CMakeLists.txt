@@ -10,7 +10,7 @@ message(STATUS "Fetching cxxopts")
 FetchContent_Declare(cxxopts URL https://github.com/jarro2783/cxxopts/archive/v3.0.0.zip)
 FetchContent_MakeAvailable(cxxopts)
 
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../../../cxx-parser/cxx/terra" terra)
+add_subdirectory("${TERRA_PATH}" terra)
 
 add_executable(cppast_backend "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cc")
 target_link_libraries(cppast_backend PRIVATE terra cxxopts)
