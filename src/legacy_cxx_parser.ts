@@ -19,6 +19,15 @@ export function runAgoraRtcAstBash(
   let module = "@agoraio-extensions/cxx-parser";
   let cxxParserModulePath = require.resolve(`${module}/package.json`);
   let terraPath = path.join(path.dirname(cxxParserModulePath), "cxx", "terra");
+  // <project>/node_modules/@agoraio-extensions/cxx-parser/cxx/cppast_backend/include/system_fake
+  let systemInclude = path.join(
+    path.dirname(cxxParserModulePath),
+    "cxx",
+    "cppast_backend",
+    "include",
+    "system_fake"
+  );
+  includeHeaderDirs.push(systemInclude);
 
   let buildDir = path.join(terraBuildDir, "legacy-cxx-parser");
   if (!fs.existsSync(buildDir)) {
