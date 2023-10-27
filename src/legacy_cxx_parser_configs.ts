@@ -26,12 +26,12 @@ export class LegacyCXXParserConfigs {
         .flat(1),
       definesMacros: original.definesMacros ?? [],
       parseFiles: {
-        include: original.parseFiles.include
+        include: (original.parseFiles.include ?? [])
           .map((it) => {
             return globSync(resolvePath(it, configDir));
           })
           .flat(1),
-        exclude: original.parseFiles.exclude
+        exclude: (original.parseFiles.exclude ?? [])
           .map((it) => {
             return globSync(resolvePath(it, configDir));
           })
