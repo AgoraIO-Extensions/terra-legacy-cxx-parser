@@ -2,10 +2,18 @@
   "name": "@agoraio-extensions/terra-legacy-cxx-parser",
   "version": "0.1.0",
   "description": "",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "tsc",
     "test:integration": "jest --selectProjects=integration --verbose --useStderr --runInBand"
   },
+  "files": [
+    "dist",
+    "!__integration_test__",
+    "!**/__integration_test__",
+    "src",
+    "cxx"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
