@@ -7,6 +7,13 @@
     "build": "tsc",
     "test:integration": "jest --selectProjects=integration --verbose --useStderr --runInBand"
   },
+  "files": [
+    "dist",
+    "!__integration_test__",
+    "!**/__integration_test__",
+    "src",
+    "cxx"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
