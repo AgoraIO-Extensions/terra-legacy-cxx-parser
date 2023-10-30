@@ -155,14 +155,6 @@ int main(int argc, char **argv) {
   include_header_dirs.push_back(tmp_path.c_str());
 
   if (parse_result.count("include-header-dirs")) {
-    auto include_system_dir = std::string(project_path
-                                          + "/../../../cxx-parser/cxx/"
-                                            "cppast_backend/"
-                                            "include/system_fake");
-    include_header_dirs.push_back(include_system_dir);
-
-    std::cout << "/include/system dir: " << include_system_dir << std::endl;
-
     include_header_dirs.push_back(
         "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/"
         "Developer/SDKs/MacOSX.sdk/usr/include");
