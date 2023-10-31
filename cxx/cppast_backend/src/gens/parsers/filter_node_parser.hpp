@@ -159,6 +159,10 @@ private:
         },
     };
 
+  std::vector<std::string> filter_member_function_with_signature_for_class_and_struct_ = {
+          "agora::rtc::IRtcEngineEventHandler::onAudioRoutingChanged(int)",
+      };
+
     std::map<std::string, std::vector<std::string>> filter_member_variable_for_class_and_struct_ = {
         {
             "agora::rtc::RtcEngineContext",
@@ -401,6 +405,18 @@ private:
         }
     }
 
+    std::string GetFunctionSignature(const std::string& name_with_ns, const MemberFunction& function) {
+        std::vector<std::string> type_list;
+        for (auto &p : function.parameters) {
+            auto type_name = p.type.GetTypeName();
+            type_list.push_back(type_name);
+        }
+
+        std::string type_list_in_str = BaseSyntaxRender::JoinToString(type_list, ", ");
+
+        return name_with_ns + "::" + function.name + "(" + type_list_in_str + ")";
+    }
+
 public:
     bool Parse(const ParseConfig &parse_config, ParseResult &parse_result)
     {
@@ -462,6 +478,14 @@ public:
                                         std::cout << "FilterNodeParser ShouldRemoveMemberFunction:" << class_with_ns << "::" << method.name << "\n";
                                         shouldRemove = true;
                                     }
+                                }
+
+                                std::string fun_with_signature = GetFunctionSignature(class_with_ns, method);
+                                std::cout << "GetFunctionSignature class:" << fun_with_signature << "\n";
+                                if (std::find(filter_member_function_with_signature_for_class_and_struct_.begin(), filter_member_function_with_signature_for_class_and_struct_.end(), fun_with_signature) != filter_member_function_with_signature_for_class_and_struct_.end())
+                                {
+                                    std::cout << "FilterNodeParser Remove function with signature:" << fun_with_signature << "\n";
+                                    shouldRemove = true;
                                 }
 
                                 return shouldRemove;
@@ -548,6 +572,14 @@ public:
                                         std::cout << "FilterNodeParser ShouldRemoveMemberFunction:" << struct_with_ns << "::" << method.name << "\n";
                                         shouldRemove = true;
                                     }
+                                }
+
+                                std::string fun_with_signature = GetFunctionSignature(struct_with_ns, method);
+                                std::cout << "GetFunctionSignature struct:" << fun_with_signature << "\n";
+                                if (std::find(filter_member_function_with_signature_for_class_and_struct_.begin(), filter_member_function_with_signature_for_class_and_struct_.end(), fun_with_signature) != filter_member_function_with_signature_for_class_and_struct_.end())
+                                {
+                                    std::cout << "FilterNodeParser Remove function with signature:" << fun_with_signature << "\n";
+                                    shouldRemove = true;
                                 }
 
                                 return shouldRemove;
