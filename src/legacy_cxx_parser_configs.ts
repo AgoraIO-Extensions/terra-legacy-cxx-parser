@@ -21,25 +21,29 @@ export class LegacyCXXParserConfigs {
       language: original.language,
       includeHeaderDirs: original.includeHeaderDirs
         .map((it) => {
-          return globSync(resolvePath(it, configDir));
+          // The files order will descend when using globSync. So we sort the files to ensure the order.
+          return globSync(resolvePath(it, configDir)).sort();
         })
         .flat(1),
       definesMacros: original.definesMacros ?? [],
       parseFiles: {
         include: (original.parseFiles.include ?? [])
           .map((it) => {
-            return globSync(resolvePath(it, configDir));
+            // The files order will descend when using globSync. So we sort the files to ensure the order.
+            return globSync(resolvePath(it, configDir)).sort();
           })
           .flat(1),
         exclude: (original.parseFiles.exclude ?? [])
           .map((it) => {
-            return globSync(resolvePath(it, configDir));
+            // The files order will descend when using globSync. So we sort the files to ensure the order.
+            return globSync(resolvePath(it, configDir)).sort();
           })
           .flat(1),
       },
       customHeaders: original.customHeaders
         .map((it) => {
-          return globSync(resolvePath(it, configDir));
+          // The files order will descend when using globSync. So we sort the files to ensure the order.
+          return globSync(resolvePath(it, configDir)).sort();
         })
         .flat(1),
       legacyFlags: original.legacyFlags,
