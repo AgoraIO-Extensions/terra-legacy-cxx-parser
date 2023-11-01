@@ -9,3 +9,4 @@ dump_json.json
 .ccls-cache
 package-lock.json
 dist/
+.yarn
