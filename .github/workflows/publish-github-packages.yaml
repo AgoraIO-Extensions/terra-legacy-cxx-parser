@@ -16,6 +16,8 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
       # Setup .npmrc file to publish to GitHub Packages
       - uses: actions/setup-node@v3
         with:
@@ -23,9 +25,9 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
           # Defaults to the user or organization that owns the workflow file
           scope: "@agoraio-extensions"
-      - uses: AgoraIO-Extensions/actions/.github/actions/ssh@ssh-ci
-        with:
-          private-key: ${{ secrets.PRIVATE_KEY }}
+      - name: Reconfigure git to use HTTP authentication
+        run: >
+          git config --global url."https://${{ secrets.GH_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
 
       - name: publish package
         if: always()
