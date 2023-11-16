@@ -93,6 +93,7 @@ int main(int argc, char **argv) {
         ("gen-rtcengine-proxy", "Generate the RtcEngineProxy, more detail see https://jira.agoralab.co/browse/EP-35")
         ("dump-json", "Only dump the C++ header files to json")
         ("language", "Render language, supported language: dart, ts, c++", cxxopts::value<std::string>())
+        ("native-sdk-version", "The native sdk version, e.g., 4.2.3.1", cxxopts::value<std::string>())
         ("legacy-renders", "The legacy renders allow you to compose which render you want, split with \",\"", cxxopts::value<std::string>());
   // clang-format on
 
@@ -108,6 +109,7 @@ int main(int argc, char **argv) {
   bool is_gen_fake_rtcengine = false;
   bool is_gen_rtcengine_proxy = false;
   bool is_dump_json = false;
+  std::string nativeSdkVersion = "";
 
   std::map<std::string, std::string> defines = {
       {"__GLIBC_USE\(...\)", "0"},
@@ -126,6 +128,13 @@ int main(int argc, char **argv) {
     }
   } else {
     std::cerr << "The language is missing." << std::endl;
+    return -1;
+  }
+
+  if (parse_result.count("native-sdk-version")) {
+    nativeSdkVersion = parse_result["native-sdk-version"].as<std::string>();
+  } else {
+    std::cerr << "The native-sdk-version is missing." << std::endl;
     return -1;
   }
 
@@ -294,7 +303,7 @@ int main(int argc, char **argv) {
   DefaultVisitor rootVisitor;
 
   rootVisitor.AddParser(
-      std::make_unique<FilterNodeParser>());// 过滤不需要的node
+      std::make_unique<FilterNodeParser>(nativeSdkVersion));// 过滤不需要的node
   rootVisitor.AddParser(
       std::make_unique<CustomNodeParser>(include_header_dirs, custom_headers,
                                          defines));// 追加自定义node
