@@ -4,6 +4,7 @@ import { globSync } from "glob";
 
 export interface LegacyCXXParserConfigs {
   language: string;
+  nativeSdkVersion: string;
   includeHeaderDirs: string[];
   definesMacros: string[];
   parseFiles: ParseFilesConfig;
@@ -19,6 +20,7 @@ export class LegacyCXXParserConfigs {
   ): LegacyCXXParserConfigs {
     return {
       language: original.language,
+      nativeSdkVersion: original.nativeSdkVersion,
       includeHeaderDirs: original.includeHeaderDirs
         .map((it) => {
           // The files order will descend when using globSync. So we sort the files to ensure the order.

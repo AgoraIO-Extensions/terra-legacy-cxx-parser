@@ -11,7 +11,17 @@ using namespace terra;
 
 class FilterNodeParser : public Parser
 {
+public:
+    FilterNodeParser(std::string nativeSdkVersion): nativeSdkVersion_(nativeSdkVersion)  {
+        // This change only for native sdk version 4.2.3.1 at this time
+        if (nativeSdkVersion_.compare("4.2.3.1") == 0) {
+            filter_member_function_with_signature_for_class_and_struct_.push_back("agora::rtc::IRtcEngineEventHandler::onAudioRoutingChanged(int)");
+        }
+    }
+
 private:
+    std::string nativeSdkVersion_;
+
     std::vector<std::string> filter_global_file_{
         "AgoraOptional.h",
         "AgoraRefPtr.h",
@@ -159,9 +169,7 @@ private:
         },
     };
 
-  std::vector<std::string> filter_member_function_with_signature_for_class_and_struct_ = {
-          "agora::rtc::IRtcEngineEventHandler::onAudioRoutingChanged(int)",
-      };
+  std::vector<std::string> filter_member_function_with_signature_for_class_and_struct_ = { };
 
     std::map<std::string, std::vector<std::string>> filter_member_variable_for_class_and_struct_ = {
         {

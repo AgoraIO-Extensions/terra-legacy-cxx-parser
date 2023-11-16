@@ -7,6 +7,7 @@ import * as fs from "fs";
 export function runAgoraRtcAstBash(
   terraBuildDir: string,
   language: string,
+  nativeSdkVersion: string,
   includeHeaderDirs: string[],
   customHeaders: string[],
   parseFiles: string[],
@@ -51,6 +52,7 @@ export function runAgoraRtcAstBash(
   let bashArgs: string = `--visit-headers=${visit_headers_arg} --include-header-dirs=${include_header_dirs_arg}`;
 
   bashArgs += ` --language=${language}`;
+  bashArgs += ` --native-sdk-version=${nativeSdkVersion}`;
 
   let definess = defines.join(",");
   bashArgs += ` --defines-macros=\"${definess}\"`;
@@ -95,6 +97,7 @@ export function LegacyCXXParser(
   runAgoraRtcAstBash(
     terraContext.buildDir,
     legacyCxxParserConfigs.language,
+    legacyCxxParserConfigs.nativeSdkVersion,
     legacyCxxParserConfigs.includeHeaderDirs,
     legacyCxxParserConfigs.customHeaders ?? [],
     parseFiles,

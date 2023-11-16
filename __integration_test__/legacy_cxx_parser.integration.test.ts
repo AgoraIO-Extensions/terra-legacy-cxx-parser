@@ -41,6 +41,7 @@ namespace ns1 {
 
       let args = {
         language: "c++",
+        nativeSdkVersion: "4.1.1.21",
         includeHeaderDirs: [],
         definesMacros: [],
         parseFiles: { include: [file1Name] },
