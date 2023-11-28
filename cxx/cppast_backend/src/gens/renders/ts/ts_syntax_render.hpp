@@ -15,6 +15,7 @@ protected:
       {"uint16_t", "number"},      {"long long", "number"},
       {"int", "number"},           {"bool", "boolean"},
       {"intptr_t", "number"},      {"uintptr_t", "number"},
+      {"const char *", "string"},
   };
 
   std::map<std::string, std::string> kTypeDefMap = {
@@ -26,8 +27,6 @@ protected:
       {"AString", "string"},
       {"user_id_t", "string"},
   };
-
-  std::vector<std::string> kHideTypeMap{"agora_refptr", "Optional"};
 
 protected:
   SyntaxRender::RenderedBlock RenderTypeName(const std::string &type_name) {
@@ -78,12 +77,6 @@ protected:
 
     if (type.empty()) {
       type = simple_type.source;
-
-      for (auto &dummy : kHideTypeMap) {
-        Replace(type, dummy, "");
-        Replace(type, "<", "");
-        Replace(type, ">", "");
-      }
     }
 
     switch (simple_type.kind) {
@@ -121,12 +114,11 @@ protected:
         type = RenderTypeName(type).rendered_content + "[]";
       }
       break;
+    case template_t:
+      type = RenderTypeName(simple_type.template_arguments[0]).rendered_content;
+      break;
     default:
-      if (type == "const char *") {
-        type = "string";
-      } else {
-        type = RenderTypeName(type).rendered_content;
-      }
+      type = RenderTypeName(type).rendered_content;
       break;
     }
 
