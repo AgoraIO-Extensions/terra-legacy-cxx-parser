@@ -315,6 +315,9 @@ public:
                     dart_type = "List<" + dart_type + ">";
                 }
             }
+            else if (simple_type.kind == SimpleTypeKind::template_t) {
+                dart_type = RenderTypeName(simple_type.template_arguments[0]).rendered_content;
+            }
             else
             {
                 if (simple_type.kind == SimpleTypeKind::array_t)

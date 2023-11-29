@@ -35,7 +35,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          yarn set version berry
           yarn
           yarn test:integration
 
@@ -74,6 +73,5 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          yarn set version berry
           yarn
           yarn test:integration

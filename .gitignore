@@ -9,4 +9,11 @@ dump_json.json
 .ccls-cache
 package-lock.json
 dist/
-.yarn
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
