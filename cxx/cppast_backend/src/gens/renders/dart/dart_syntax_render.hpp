@@ -285,6 +285,13 @@ public:
             dart_type = simple_type.source;
         }
 
+        for (auto &dummy : DummyForDartType)
+        {
+            Replace(dart_type, dummy, "");
+            Replace(dart_type, "<", "");
+            Replace(dart_type, ">", "");
+        }
+
         if ((dart_type == "unsigned char" || dart_type == "uint8_t") && (simple_type.kind == SimpleTypeKind::pointer_t || simple_type.kind == SimpleTypeKind::array_t))
         {
             dart_type = "Uint8List";
