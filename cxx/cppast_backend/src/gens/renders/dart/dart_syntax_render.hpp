@@ -285,13 +285,6 @@ public:
             dart_type = simple_type.source;
         }
 
-        for (auto &dummy : DummyForDartType)
-        {
-            Replace(dart_type, dummy, "");
-            Replace(dart_type, "<", "");
-            Replace(dart_type, ">", "");
-        }
-
         if ((dart_type == "unsigned char" || dart_type == "uint8_t") && (simple_type.kind == SimpleTypeKind::pointer_t || simple_type.kind == SimpleTypeKind::array_t))
         {
             dart_type = "Uint8List";
@@ -314,6 +307,9 @@ public:
                 {
                     dart_type = "List<" + dart_type + ">";
                 }
+            }
+            else if (simple_type.kind == SimpleTypeKind::template_t) {
+                dart_type = RenderTypeName(simple_type.template_arguments[0]).rendered_content;
             }
             else
             {
