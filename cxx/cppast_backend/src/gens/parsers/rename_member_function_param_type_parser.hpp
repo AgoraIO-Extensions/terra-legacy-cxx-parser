@@ -1132,6 +1132,116 @@ private:
                 },
             },
             {
+                "ILocalSpatialAudioEngine",
+                {
+                    {
+                        "setZones",
+                        {
+                            {
+                                "zones",
+                                SimpleType{
+                                    "agora::rtc::SpatialAudioZone",
+                                    "const agora::rtc::SpatialAudioZone*",
+                                    SimpleTypeKind::array_t,
+                                    true,
+                                    false,
+                                },
+                            },
+                        },
+                    },
+                    {
+                        "updateSelfPosition",
+                        {
+                            {
+                                "position",
+                                SimpleType{
+                                    "float",
+                                    "const float*",
+                                    SimpleTypeKind::array_t,
+                                    true,
+                                    false,
+                                },
+                            },
+                            {
+                                "axisForward",
+                                SimpleType{
+                                    "float",
+                                    "const float*",
+                                    SimpleTypeKind::array_t,
+                                    true,
+                                    false,
+                                },
+                            },
+                            {
+                                "axisRight",
+                                SimpleType{
+                                    "float",
+                                    "const float*",
+                                    SimpleTypeKind::array_t,
+                                    true,
+                                    false,
+                                },
+                            },
+                            {
+                                "axisUp",
+                                SimpleType{
+                                    "float",
+                                    "const float*",
+                                    SimpleTypeKind::array_t,
+                                    true,
+                                    false,
+                                },
+                            }
+                        },
+                    },
+                    {
+                        "updateSelfPositionEx",
+                        {
+                            {
+                                "position",
+                                SimpleType{
+                                    "float",
+                                    "const float*",
+                                    SimpleTypeKind::array_t,
+                                    true,
+                                    false,
+                                },
+                            },
+                            {
+                                "axisForward",
+                                SimpleType{
+                                    "float",
+                                    "const float*",
+                                    SimpleTypeKind::array_t,
+                                    true,
+                                    false,
+                                },
+                            },
+                            {
+                                "axisRight",
+                                SimpleType{
+                                    "float",
+                                    "const float*",
+                                    SimpleTypeKind::array_t,
+                                    true,
+                                    false,
+                                },
+                            },
+                            {
+                                "axisUp",
+                                SimpleType{
+                                    "float",
+                                    "const float*",
+                                    SimpleTypeKind::array_t,
+                                    true,
+                                    false,
+                                },
+                            }
+                        },
+                    },
+                },
+            },
+            {
                 "IMusicContentCenterEventHandler",
                 {
                     {

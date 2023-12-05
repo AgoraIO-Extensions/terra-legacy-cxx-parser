@@ -281,7 +281,7 @@ int main(int argc, char **argv) {
   // };
 
   std::vector<std::string> pre_processed_files;
-  PreProcessVisitFiles(tmp_path, visit_files, pre_processed_files,
+  terra_legacy::PreProcessVisitFiles(tmp_path, visit_files, pre_processed_files,
                        is_gen_fake_rtcengine || is_gen_rtcengine_proxy
                            || is_dump_json);
 
