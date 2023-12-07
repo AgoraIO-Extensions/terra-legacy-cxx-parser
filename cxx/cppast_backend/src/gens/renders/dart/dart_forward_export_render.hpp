@@ -61,6 +61,7 @@ public:
         binding_export += "export 'package:json_annotation/json_annotation.dart';\n";
         binding_export += "export 'package:flutter/foundation.dart';\n";
         binding_export += "export 'package:agora_rtc_engine/src/agora_rtc_engine_ext.dart';\n";
+        binding_export += "export 'package:agora_rtc_engine/src/impl/json_converters.dart';\n";
         // binding_export += "export 'package:agora_rtc_engine/src/api_caller.dart';\n";
 
         impl_export += "export 'event_handler_param_json.dart';\n";

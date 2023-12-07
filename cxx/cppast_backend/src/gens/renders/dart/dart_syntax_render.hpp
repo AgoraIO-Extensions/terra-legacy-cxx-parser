@@ -276,9 +276,21 @@ public:
         return type;
     }
 
+    virtual std::string GetTypeNameFromSimpleType(const SimpleType &simple_type)
+    {
+        if (simple_type.kind == SimpleTypeKind::template_t) {
+            return simple_type.template_arguments[0];
+        }
+
+        return simple_type.GetTypeName();
+    }
+
     virtual SyntaxRender::RenderedBlock RenderSimpleType(const SimpleType &simple_type)
     {
         std::string dart_type = simple_type.name;
+        if (simple_type.kind == SimpleTypeKind::template_t) {
+            dart_type = simple_type.template_arguments[0];
+        }
 
         if (dart_type.empty())
         {
@@ -314,9 +326,6 @@ public:
                 {
                     dart_type = "List<" + dart_type + ">";
                 }
-            }
-            else if (simple_type.kind == SimpleTypeKind::template_t) {
-                dart_type = RenderTypeName(simple_type.template_arguments[0]).rendered_content;
             }
             else
             {
@@ -645,11 +654,23 @@ public:
         if (!isIgnoreJsonClass)
         {
             std::string ignore_json = "";
+            bool isClazz = false;
             if (std::find(IgnoreJsonType.begin(), IgnoreJsonType.end(), variable_type) != IgnoreJsonType.end())
             {
                 ignore_json += ", ignore: true";
+            } else {
+                Clazz clazz;
+                if (FindClass(TrimDummyType(GetTypeNameFromSimpleType(member_variable.type)), clazz) == 0)
+                {
+                    isClazz = true;
+                }
             }
+
             dart_member += "@JsonKey(name: '" + member_variable.name + "'" + " " + ignore_json + ")\n";
+            if (isClazz) {
+                // Add custom converter
+                dart_member += "@" + variable_type + "Converter()\n";
+            }
         }
 
         dart_member += "final " + variable_type + "? " + RenderNonTypeName(member_variable.name).rendered_content + ";";

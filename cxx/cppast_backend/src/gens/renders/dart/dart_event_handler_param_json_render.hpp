@@ -80,7 +80,7 @@ public:
         std::string dart_member = "";
         std::string ignore_json = "";
         Clazz clazz;
-        if (std::find(IgnoreJsonType.begin(), IgnoreJsonType.end(), actual_type) != IgnoreJsonType.end() || FindClass(TrimDummyType(member_variable.type.GetTypeName()), clazz) == 0)
+        if (std::find(IgnoreJsonType.begin(), IgnoreJsonType.end(), actual_type) != IgnoreJsonType.end() || FindClass(TrimDummyType(GetTypeNameFromSimpleType(member_variable.type)), clazz) == 0)
         {
             ignore_json += ", ignore: true";
         }

@@ -137,7 +137,7 @@ public:
 
         std::string to_search = upper_camel_case_name;
 
-        const std::regex base_regex(R"((I[A-Z]|[A-Z])?[a-z]*)");
+        const std::regex base_regex(R"((I[A-Z]|[A-Z])?[a-z0-9]*)");
         std::smatch base_match;
 
         std::sregex_iterator iter(to_search.begin(), to_search.end(), base_regex);
