@@ -193,6 +193,10 @@ public:
         }
 
         std::string ext_name = RenderClassName(original_clazz).rendered_content;
+        std::string module_name = ext_name;
+        if (IsUseIrisApiType(original_clazz.file_path)) {
+            module_name = RenderTypeName(original_clazz.name).rendered_content;
+        }
 
         std::string process_impl = "";
 
@@ -241,8 +245,8 @@ public:
 
         process_impl += "@override\n";
         process_impl += "bool handleEvent(String eventName, String eventData, List<Uint8List> buffers) {\n";
-        process_impl += "if (!eventName.startsWith('" + ext_name + "')) return false;\n";
-        process_impl += "final newEvent = eventName.replaceFirst('" + ext_name + "_', '');\n";
+        process_impl += "if (!eventName.startsWith('" + module_name + "')) return false;\n";
+        process_impl += "final newEvent = eventName.replaceFirst('" + module_name + "_', '');\n";
         // process_impl += paramName + ".process(newEvent, data, buffers);\n";
         process_impl += "if (handleEventInternal(newEvent, eventData, buffers)) {\n";
         process_impl += "return true;\n";
@@ -288,23 +292,31 @@ public:
 
         if (IsEventHandler(parent))
         {
-            if (member_function.user_data.has_value())
+            if (std::holds_alternative<Clazz>(parent))
             {
-                try
-                {
-                    const std::map<std::string, bool> &extra_info = std::any_cast<const std::map<std::string, bool> &>(member_function.user_data);
-                    if (extra_info.find("is_from_rtc_event_handler_ex") != extra_info.end())
+                const Clazz &cls = std::get<Clazz>(parent);
+                if (IsUseIrisApiType(cls.file_path)) {
+                    switch_case = IrisApiType(cls, member_function, false);
+                } else {
+                    if (member_function.user_data.has_value())
                     {
-                        bool is_from_rtc_event_handler_ex = extra_info.find("is_from_rtc_event_handler_ex")->second;
-                        if (is_from_rtc_event_handler_ex)
+                        try
                         {
-                            switch_case = switch_case + "Ex";
+                            const std::map<std::string, bool> &extra_info = std::any_cast<const std::map<std::string, bool> &>(member_function.user_data);
+                            if (extra_info.find("is_from_rtc_event_handler_ex") != extra_info.end())
+                            {
+                                bool is_from_rtc_event_handler_ex = extra_info.find("is_from_rtc_event_handler_ex")->second;
+                                if (is_from_rtc_event_handler_ex)
+                                {
+                                    switch_case = switch_case + "Ex";
+                                }
+                            }
+                        }
+                        catch (const std::bad_any_cast &e)
+                        {
+                            std::cout << e.what() << '\n';
                         }
                     }
-                }
-                catch (const std::bad_any_cast &e)
-                {
-                    std::cout << e.what() << '\n';
                 }
             }
         }

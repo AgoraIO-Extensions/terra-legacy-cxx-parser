@@ -261,13 +261,24 @@ public:
                     }
                     else
                     {
-                        parameter_json_map.push_back(std::string("'" + param_map_key + "'" + ":" + param_name));
+                        std::string tmpKV = "";
+                        if (IsNullableVariable(param)) { 
+                            tmpKV += "if (" + param_name + " != null)\n";
+                        }
+                        tmpKV += std::string("'" + param_map_key + "'" + ":" + param_name);
+
+                        parameter_json_map.push_back(tmpKV);
                     }
 
                     continue;
                 }
 
-                parameter_json_map.push_back(std::string("'" + param_map_key + "'" + ":" + param_name));
+                std::string tmpKV = "";
+                if (IsNullableVariable(param)) { 
+                    tmpKV += "if (" + param_name + " != null)\n";
+                }
+                tmpKV += std::string("'" + param_map_key + "'" + ":" + param_name);
+                parameter_json_map.push_back(tmpKV);
             }
         }
 
@@ -276,13 +287,20 @@ public:
         dart_function += "{\n";
 
         std::string api_type = "";
+        std::string const_or_final_api_type_prefix = "final";
         if (std::holds_alternative<Clazz>(parent))
         {
             const Clazz clazz = std::get<Clazz>(parent);
-            if (clazz.name[0] == 'I')
-            {
-                std::string api_type_prefix = std::string(clazz.name.begin() + 1, clazz.name.end());
-                api_type += "${isOverrideClassName ? className : '" + api_type_prefix + "'}_" + member_function.name;
+
+            if (IsUseIrisApiType(clazz.file_path)) {
+                api_type = IrisApiType(clazz, member_function);
+                const_or_final_api_type_prefix = "const";
+            } else {
+                if (clazz.name[0] == 'I')
+                {
+                    std::string api_type_prefix = std::string(clazz.name.begin() + 1, clazz.name.end());
+                    api_type += "${isOverrideClassName ? className : '" + api_type_prefix + "'}_" + member_function.name;
+                }
             }
         }
 
@@ -295,7 +313,7 @@ public:
             unimplemetation = "throw UnimplementedError('Unimplement for " + member_function.name + "');\n";
         }
 
-        dart_function += comment_prefix + "final apiType = '" + api_type + "';\n";
+        dart_function += comment_prefix + const_or_final_api_type_prefix + " apiType = '" + api_type + "';\n";
         for (auto &e : parameter_json_map_extra_parameter_name)
         {
             dart_function += comment_prefix + e + "\n";
