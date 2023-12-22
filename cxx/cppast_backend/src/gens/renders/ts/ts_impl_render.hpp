@@ -72,6 +72,11 @@ public:
       }
 
       std::string function;
+      // std::string api_type = function_name;
+      // const Clazz clazz = std::get<Clazz>(parent);
+      // if(IsUseIrisApiType(clazz.file_path)){
+      //   api_type = "_" + IrisApiType(clazz, member_function, false);
+      // }
       function += "    case '" + function_name + "':\n";
       function += "      if (handler." +
                   RenderNonTypeName(function_name).rendered_content +
@@ -189,6 +194,11 @@ public:
       }
       function += "  }\n";
 
+      std::string api_type = RenderedApiType(member_function).rendered_content;
+      const Clazz clazz = std::get<Clazz>(parent);
+      if(IsUseIrisApiType(clazz.file_path)){
+        api_type = IrisApiType(clazz, member_function);
+      }
       std::string function_api_type;
       function_api_type +=
           "  protected getApiTypeFrom" +
@@ -196,7 +206,7 @@ public:
           JoinToString(RenderedBlocksToStringList(params_type_map), ", ") +
           "): string {\n";
       function_api_type += "    return '" +
-                           RenderedApiType(member_function).rendered_content +
+                           api_type +
                            "'\n";
       function_api_type += "  }\n";
 
