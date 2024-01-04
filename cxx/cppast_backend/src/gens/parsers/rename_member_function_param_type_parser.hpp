@@ -252,6 +252,21 @@ private:
                         },
                     },
                     {
+                        "onRdtMessage",
+                        {
+                            {
+                                "data",
+                                SimpleType{
+                                    "uint8_t",
+                                    "const uint8_t*",
+                                    SimpleTypeKind::pointer_t,
+                                    true,
+                                    false,
+                                },
+                            },
+                        },
+                    },
+                    {
                         "onStreamPublished",
                         {
                             {
@@ -353,6 +368,21 @@ private:
                 {
                     {
                         "onStreamMessage",
+                        {
+                            {
+                                "data",
+                                SimpleType{
+                                    "uint8_t",
+                                    "const uint8_t*",
+                                    SimpleTypeKind::pointer_t,
+                                    true,
+                                    false,
+                                },
+                            },
+                        },
+                    },
+                    {
+                        "onRdtMessage",
                         {
                             {
                                 "data",
@@ -478,6 +508,21 @@ private:
                     },
                     {
                         "sendStreamMessage",
+                        {
+                            {
+                                "data",
+                                SimpleType{
+                                    "uint8_t",
+                                    "const uint8_t*",
+                                    SimpleTypeKind::pointer_t,
+                                    true,
+                                    false,
+                                },
+                            },
+                        },
+                    },
+                    {
+                        "sendRdtMessage",
                         {
                             {
                                 "data",
@@ -752,6 +797,21 @@ private:
                     },
                     {
                         "sendStreamMessageEx",
+                        {
+                            {
+                                "data",
+                                SimpleType{
+                                    "uint8_t",
+                                    "const uint8_t*",
+                                    SimpleTypeKind::pointer_t,
+                                    true,
+                                    false,
+                                },
+                            },
+                        },
+                    },
+                    {
+                        "sendRdtMessageEx",
                         {
                             {
                                 "data",
