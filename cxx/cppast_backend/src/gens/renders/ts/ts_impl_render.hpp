@@ -196,9 +196,6 @@ public:
 
       std::string api_type = RenderedApiType(member_function).rendered_content;
       const Clazz clazz = std::get<Clazz>(parent);
-      if(IsUseIrisApiType(clazz.file_path)){
-        api_type = IrisApiType(clazz, member_function);
-      }
       std::string function_api_type;
       function_api_type +=
           "  protected getApiTypeFrom" +
