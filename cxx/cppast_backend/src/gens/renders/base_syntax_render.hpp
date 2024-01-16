@@ -3,13 +3,11 @@
 
 #include "terra.hpp"
 #include "terra_generator.hpp"
-#include <algorithm>
 #include <iostream>
 #include <iterator>
 #include <regex>
 #include <sstream>
 #include <string>
-#include <unordered_set>
 #include <variant>
 #include <vector>
 
@@ -152,7 +150,7 @@ class BaseSyntaxRender : public SyntaxRender {
   }
 
   static std::string ReplaceAll(std::string str, const std::string &from,
-                                const std::string &to) {
+                         const std::string &to) {
     size_t start_pos = 0;
     while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
       str.replace(start_pos, from.length(), to);
@@ -171,12 +169,6 @@ class BaseSyntaxRender : public SyntaxRender {
     } else {
       return false;
     }
-  }
-
-  static bool StartsWith(const std::string &fullString,
-                         const std::string &starting) {
-    if (fullString.length() < starting.length()) { return false; }
-    return fullString.compare(0, starting.length(), starting) == 0;
   }
 
   int FindStruct(const std::string &name, Struct &out) {
@@ -360,6 +352,60 @@ class BaseSyntaxRender : public SyntaxRender {
         + NameWithUnderscoresToCamelCase(parent_name, true) + "_"
         + NameWithUnderscoresToCamelCase(enum_constant.name) + " */";
     return ToLower(tag);
+  }
+
+  bool IsUseIrisApiType(const std::string &file_path) {
+    // TODO(littlegnal): Temporary put the config here,
+    std::vector<std::string> use_iris_api_type_files{
+        "IAgoraH265Transcoder.h",
+    };
+
+    bool is_use_iris_api_type = false;
+    std::filesystem::path my_file_path(file_path);
+    if (std::find(use_iris_api_type_files.begin(),
+                  use_iris_api_type_files.end(), my_file_path.filename())
+        != use_iris_api_type_files.end()) {
+
+      is_use_iris_api_type = true;
+    }
+
+    return is_use_iris_api_type;
+  }
+
+  static std::string IrisApiType(const Clazz &clazz,
+                                 const MemberFunction &member_func,
+                                 bool includeClassName = true) {
+    std::string ptrEscape = "ptr";
+    std::string refEscape = "ref";
+    std::string whitespaceEscape = "_";
+    std::string seperator = "__";
+
+    std::vector<std::string> outList;
+
+    for (auto &param : member_func.parameters) {
+      std::string out = param.type.name;
+      out = ReplaceAll(out, "::", whitespaceEscape);
+
+      if (param.type.is_const) { out = "const" + whitespaceEscape + out; }
+
+      if (param.type.kind == SimpleTypeKind::pointer_t) {
+        out += (whitespaceEscape + ptrEscape);
+      } else if (param.type.kind == SimpleTypeKind::reference_t) {
+        out += (whitespaceEscape + refEscape);
+      }
+
+      outList.push_back(out);
+    }
+
+    std::string ps = JoinToString(outList, seperator);
+
+    std::string apiType = "";
+
+    if (includeClassName) { apiType += TrimNamespaces(clazz.name) + seperator; }
+
+    apiType += member_func.name + seperator + ps;
+
+    return apiType;
   }
 };
 

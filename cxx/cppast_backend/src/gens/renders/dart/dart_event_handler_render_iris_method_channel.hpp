@@ -194,6 +194,9 @@ public:
 
         std::string ext_name = RenderClassName(original_clazz).rendered_content;
         std::string module_name = ext_name;
+        if (IsUseIrisApiType(original_clazz.file_path)) {
+            module_name = RenderTypeName(original_clazz.name).rendered_content;
+        }
 
         std::string process_impl = "";
 
@@ -285,13 +288,36 @@ public:
 
     SyntaxRender::RenderedBlock RenderMemberFunction(const NodeType &parent, const MemberFunction &member_function) override
     {
-        std::string switch_case = !member_function.appIdValue.empty() ? member_function.appIdValue : member_function.name;
+        std::string switch_case = member_function.name;
 
         if (IsEventHandler(parent))
         {
             if (std::holds_alternative<Clazz>(parent))
             {
                 const Clazz &cls = std::get<Clazz>(parent);
+                if (IsUseIrisApiType(cls.file_path)) {
+                    switch_case = IrisApiType(cls, member_function, false);
+                } else {
+                    if (member_function.user_data.has_value())
+                    {
+                        try
+                        {
+                            const std::map<std::string, bool> &extra_info = std::any_cast<const std::map<std::string, bool> &>(member_function.user_data);
+                            if (extra_info.find("is_from_rtc_event_handler_ex") != extra_info.end())
+                            {
+                                bool is_from_rtc_event_handler_ex = extra_info.find("is_from_rtc_event_handler_ex")->second;
+                                if (is_from_rtc_event_handler_ex)
+                                {
+                                    switch_case = switch_case + "Ex";
+                                }
+                            }
+                        }
+                        catch (const std::bad_any_cast &e)
+                        {
+                            std::cout << e.what() << '\n';
+                        }
+                    }
+                }
             }
         }
 

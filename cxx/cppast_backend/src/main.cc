@@ -1,5 +1,4 @@
 #include "gens/mkt/delegate_api_binding.hpp"
-#include "gens/parsers/iris_api_id_parser.hpp"
 #include "gens/parsers/custom_node_parser.hpp"
 #include "gens/parsers/enum_value_parser.hpp"
 #include "gens/parsers/filter_node_parser.hpp"
@@ -303,9 +302,6 @@ int main(int argc, char **argv) {
 
   DefaultVisitor rootVisitor;
 
-  if (BaseSyntaxRender::StartsWith(nativeSdkVersion, "4.3")) {
-    rootVisitor.AddParser(std::make_unique<IrisApiIdParser>());
-  }
   rootVisitor.AddParser(
       std::make_unique<FilterNodeParser>(nativeSdkVersion));// 过滤不需要的node
   rootVisitor.AddParser(
