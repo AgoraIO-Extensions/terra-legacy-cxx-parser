@@ -298,7 +298,7 @@ public:
                 api_type_prefix = std::string(clazz.name.begin() + 1, clazz.name.end());
                 
             }
-            std::string fn = !member_function.appIdValue.empty() ? member_function.appIdValue : member_function.name;
+            std::string fn = BaseSyntaxRender::GetApiId(member_function);
             api_type += "${isOverrideClassName ? className : '" + api_type_prefix + "'}_" + fn;
         }
 

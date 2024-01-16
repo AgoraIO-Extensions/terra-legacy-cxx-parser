@@ -285,7 +285,7 @@ public:
 
     SyntaxRender::RenderedBlock RenderMemberFunction(const NodeType &parent, const MemberFunction &member_function) override
     {
-        std::string switch_case = !member_function.appIdValue.empty() ? member_function.appIdValue : member_function.name;
+        std::string switch_case = BaseSyntaxRender::GetApiId(member_function);
 
         if (IsEventHandler(parent))
         {

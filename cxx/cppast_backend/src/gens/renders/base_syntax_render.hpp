@@ -361,6 +361,18 @@ class BaseSyntaxRender : public SyntaxRender {
         + NameWithUnderscoresToCamelCase(enum_constant.name) + " */";
     return ToLower(tag);
   }
+
+  static std::string GetApiId(const MemberFunction &member_function) {
+    std::string apiId = !member_function.signature.empty()
+        ? member_function.signature
+        : member_function.name;
+    if (BaseSyntaxRender::StartsWith(apiId, "(")
+        && BaseSyntaxRender::EndWith(apiId, ")")) {
+      apiId = member_function.name;
+    }
+
+    return apiId;
+  }
 };
 
 #endif// BASE_SYNTAX_RENDER_H_

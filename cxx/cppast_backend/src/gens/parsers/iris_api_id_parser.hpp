@@ -81,11 +81,10 @@ class IrisApiIdParser : public Parser {
             std::string appIdKey = IrisApiId(clazz, func);
             std::string appIdValue = IrisApiId(clazz, func, false, false);
 
-            func.appIdKey = appIdKey;
-            func.appIdValue = appIdValue;
+            // Since the `signature` is not be used in the legacy cxx-parser, we reuse it to store the iris api id
+            func.signature = appIdValue;
 
-            std::cout << "[IrisApiIdParser] appIdKey: " << appIdKey
-                      << ", appIdValue: " << appIdValue << "\n";
+            std::cout << "[IrisApiIdParser] appIdValue: " << appIdValue << "\n";
           }
         }
       }
