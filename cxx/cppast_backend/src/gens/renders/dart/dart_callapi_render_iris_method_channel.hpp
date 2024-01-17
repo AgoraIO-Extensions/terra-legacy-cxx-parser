@@ -292,16 +292,14 @@ public:
         {
             const Clazz clazz = std::get<Clazz>(parent);
 
-            if (IsUseIrisApiType(clazz.file_path)) {
-                api_type = IrisApiType(clazz, member_function);
-                const_or_final_api_type_prefix = "const";
-            } else {
-                if (clazz.name[0] == 'I')
-                {
-                    std::string api_type_prefix = std::string(clazz.name.begin() + 1, clazz.name.end());
-                    api_type += "${isOverrideClassName ? className : '" + api_type_prefix + "'}_" + member_function.name;
-                }
+            std::string api_type_prefix = clazz.name;
+            if (clazz.name[0] == 'I')
+            {
+                api_type_prefix = std::string(clazz.name.begin() + 1, clazz.name.end());
+                
             }
+            std::string fn = BaseSyntaxRender::GetApiId(member_function);
+            api_type += "${isOverrideClassName ? className : '" + api_type_prefix + "'}_" + fn;
         }
 
         std::string comment_prefix = "";
