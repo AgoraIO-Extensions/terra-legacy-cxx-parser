@@ -11,6 +11,7 @@
 #include "gens/renders/dart/dart_callapi_event_handler_buffer_ext_render.hpp"
 #include "gens/renders/dart/dart_callapi_render.hpp"
 #include "gens/renders/dart/dart_callapi_render_iris_method_channel.hpp"
+#include "gens/renders/dart/dart_event_handler_render_iris_method_channel_before_430.hpp"
 #include "gens/renders/dart/dart_event_handler_param_json_render.hpp"
 #include "gens/renders/dart/dart_event_handler_render.hpp"
 #include "gens/renders/dart/dart_event_handler_render_iris_method_channel.hpp"
@@ -350,6 +351,8 @@ int main(int argc, char **argv) {
         std::make_shared<LegacyDartEventHandlerRender>();
     auto event_handler_iris_method_channel_render =
         std::make_shared<DartEventHandlerIrisMethodChannelRender>();
+    auto event_handler_iris_method_channel_before_430_render =
+        std::make_shared<DartEventHandlerIrisMethodChannelBefore430Render>();
     auto call_api_impl_param_render =
         std::make_shared<DartStructToJsonSerializableRender>();
     auto callapi_eventhandler_buffer_ext_render =
@@ -375,6 +378,8 @@ int main(int argc, char **argv) {
         renders.emplace_back(forward_export_render);
       } else if (it == "DartEventHandlerIrisMethodChannelRender") {
         renders.emplace_back(event_handler_iris_method_channel_render);
+      } else if (it == "DartEventHandlerIrisMethodChannelBefore430Render") {
+        renders.emplace_back(event_handler_iris_method_channel_before_430_render);
       } else if (it == "DartCallApiIrisMethodChannelRender") {
         renders.emplace_back(callapi_iris_method_channel_render);
       } else if (it == "LegacyDartEventHandlerRender") {
