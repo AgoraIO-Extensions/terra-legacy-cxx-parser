@@ -267,6 +267,21 @@ private:
                         },
                     },
                     {
+                        "onAudioMetadataReceived",
+                        {
+                            {
+                                "metadata",
+                                SimpleType{
+                                    "uint8_t",
+                                    "const uint8_t*",
+                                    SimpleTypeKind::pointer_t,
+                                    true,
+                                    false,
+                                },
+                            },
+                        },
+                    },
+                    {
                         "onStreamPublished",
                         {
                             {
@@ -386,6 +401,21 @@ private:
                         {
                             {
                                 "data",
+                                SimpleType{
+                                    "uint8_t",
+                                    "const uint8_t*",
+                                    SimpleTypeKind::pointer_t,
+                                    true,
+                                    false,
+                                },
+                            },
+                        },
+                    },
+                    {
+                        "onAudioMetadataReceived",
+                        {
+                            {
+                                "metadata",
                                 SimpleType{
                                     "uint8_t",
                                     "const uint8_t*",
@@ -526,6 +556,21 @@ private:
                         {
                             {
                                 "data",
+                                SimpleType{
+                                    "uint8_t",
+                                    "const uint8_t*",
+                                    SimpleTypeKind::pointer_t,
+                                    true,
+                                    false,
+                                },
+                            },
+                        },
+                    },
+                    {
+                        "sendAudioMetadata",
+                        {
+                            {
+                                "metadata",
                                 SimpleType{
                                     "uint8_t",
                                     "const uint8_t*",
@@ -815,6 +860,21 @@ private:
                         {
                             {
                                 "data",
+                                SimpleType{
+                                    "uint8_t",
+                                    "const uint8_t*",
+                                    SimpleTypeKind::pointer_t,
+                                    true,
+                                    false,
+                                },
+                            },
+                        },
+                    },
+                    {
+                        "sendAudioMetadataEx",
+                        {
+                            {
+                                "metadata",
                                 SimpleType{
                                     "uint8_t",
                                     "const uint8_t*",
