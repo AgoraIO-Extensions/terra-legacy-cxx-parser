@@ -1,8 +1,8 @@
 #include "gens/mkt/delegate_api_binding.hpp"
-#include "gens/parsers/iris_api_id_parser.hpp"
 #include "gens/parsers/custom_node_parser.hpp"
 #include "gens/parsers/enum_value_parser.hpp"
 #include "gens/parsers/filter_node_parser.hpp"
+#include "gens/parsers/iris_api_id_parser.hpp"
 #include "gens/parsers/merge_rtc_event_handler_ex_parser.hpp"
 #include "gens/parsers/pointer_array_parser.hpp"
 #include "gens/parsers/rename_member_function_param_type_parser.hpp"
@@ -11,10 +11,10 @@
 #include "gens/renders/dart/dart_callapi_event_handler_buffer_ext_render.hpp"
 #include "gens/renders/dart/dart_callapi_render.hpp"
 #include "gens/renders/dart/dart_callapi_render_iris_method_channel.hpp"
-#include "gens/renders/dart/dart_event_handler_render_iris_method_channel_before_430.hpp"
 #include "gens/renders/dart/dart_event_handler_param_json_render.hpp"
 #include "gens/renders/dart/dart_event_handler_render.hpp"
 #include "gens/renders/dart/dart_event_handler_render_iris_method_channel.hpp"
+#include "gens/renders/dart/dart_event_handler_render_iris_method_channel_before_430.hpp"
 #include "gens/renders/dart/dart_forward_export_render.hpp"
 #include "gens/renders/dart/dart_struct_to_json_serializable_render.hpp"
 #include "gens/renders/dart/dart_syntax_render.hpp"
@@ -283,9 +283,9 @@ int main(int argc, char **argv) {
   // };
 
   std::vector<std::string> pre_processed_files;
-  terra_legacy::PreProcessVisitFiles(tmp_path, visit_files, pre_processed_files,
-                       is_gen_fake_rtcengine || is_gen_rtcengine_proxy
-                           || is_dump_json);
+  terra_legacy::PreProcessVisitFiles(
+      tmp_path, visit_files, pre_processed_files,
+      is_gen_fake_rtcengine || is_gen_rtcengine_proxy || is_dump_json);
 
   if (is_gen_fake_rtcengine) {
     GenFakeRtcEngine(include_header_dirs, pre_processed_files, output_dir);
@@ -309,9 +309,9 @@ int main(int argc, char **argv) {
   }
   rootVisitor.AddParser(
       std::make_unique<FilterNodeParser>(nativeSdkVersion));// 过滤不需要的node
-  rootVisitor.AddParser(
-      std::make_unique<CustomNodeParser>(include_header_dirs, custom_headers,
-                                         defines));// 追加自定义node
+  rootVisitor.AddParser(std::make_unique<CustomNodeParser>(
+      include_header_dirs, custom_headers, defines,
+      nativeSdkVersion));// 追加自定义node
 
   rootVisitor.AddParser(
       std::make_unique<PointerArrayParser>());// 特化指针为数组
@@ -379,7 +379,8 @@ int main(int argc, char **argv) {
       } else if (it == "DartEventHandlerIrisMethodChannelRender") {
         renders.emplace_back(event_handler_iris_method_channel_render);
       } else if (it == "DartEventHandlerIrisMethodChannelBefore430Render") {
-        renders.emplace_back(event_handler_iris_method_channel_before_430_render);
+        renders.emplace_back(
+            event_handler_iris_method_channel_before_430_render);
       } else if (it == "DartCallApiIrisMethodChannelRender") {
         renders.emplace_back(callapi_iris_method_channel_render);
       } else if (it == "LegacyDartEventHandlerRender") {
