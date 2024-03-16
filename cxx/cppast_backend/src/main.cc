@@ -1,4 +1,5 @@
 #include "gens/mkt/delegate_api_binding.hpp"
+#include "gens/parsers/iris_api_id_parser.hpp"
 #include "gens/parsers/custom_node_parser.hpp"
 #include "gens/parsers/enum_value_parser.hpp"
 #include "gens/parsers/filter_node_parser.hpp"
